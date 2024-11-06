@@ -4,53 +4,53 @@ import Tutorial.authDemo.modules.auth.dto.LoginRequestDto;
 import Tutorial.authDemo.modules.auth.dto.LoginResponseDto;
 import Tutorial.authDemo.modules.auth.dto.SignupRequestDto;
 import Tutorial.authDemo.modules.auth.dto.SignupResponseDto;
+import Tutorial.authDemo.modules.user.UserEntity;
+import Tutorial.authDemo.modules.user.UserRepository;
+import Tutorial.authDemo.util.CustomPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {
-    LoginRequestDto loginRequest;
-    LoginResponseDto loginResponse;
-    SignupRequestDto signupRequest;
-    SignupResponseDto signupResponse;
 
-    @Autowired
-    public AuthController(
-        LoginRequestDto loginRequest,
-        LoginResponseDto loginResponse,
-        SignupRequestDto signupRequest,
-        SignupResponseDto signupResponse
-    ) {
-        this.loginRequest = loginRequest;
-        this.loginResponse = loginResponse;
-        this.signupRequest = signupRequest;
-        this.signupResponse = signupResponse;
-    }
+  private final UserRepository userRepository;
+  private final CustomPasswordEncoder passwordEncoder;
 
-    @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto payload) {
-        // 401
-        // 404
-        // 400
+  @Autowired
+  public AuthController(UserRepository userRepository, CustomPasswordEncoder passwordEncoder) {
+    this.passwordEncoder = passwordEncoder;
+    this.userRepository = userRepository;
+  }
 
-        return ResponseEntity.ok(
-            signupResponse.getResponse(payload.getEmail(), payload.getPassword())
-        );
-    }
+  @PostMapping("/signup")
+  public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto payload) {
+    // 401
+    // 404
+    // 400
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto payload) {
-        // 401
-        // 404
-        // 400
+    String hashedPassword = this.passwordEncoder.encode(payload.password());
 
-        return ResponseEntity.ok(
-            loginResponse.getResponse(payload.getEmail(), payload.getPassword())
-        );
-    }
+    this.userRepository.save(
+        UserEntity.builder()
+            .id(null)
+            .email(payload.email()).hashedPassword(hashedPassword)
+            .build()
+    );
+
+    return ResponseEntity.ok(new SignupResponseDto(payload.email(), payload.password()));
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto payload) {
+    // 401
+    // 404
+    // 400
+
+    return ResponseEntity.ok(new LoginResponseDto(payload.email(), payload.password()));
+  }
 }

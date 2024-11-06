@@ -1,16 +1,19 @@
-package Tutorial.authDemo.modules.auth.dto;
+package Tutorial.authDemo.modules.user.dto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.stereotype.Service;
 
 @Getter
 @Setter
-@Accessors(fluent = true)
 @RequiredArgsConstructor
-public class LoginRequestDto {
+@Accessors(fluent = true)
+public class UserResponseDto {
+    @NonNull
+    private Long id;
+
+    @NonNull
     private String email;
-    private String password;
 }

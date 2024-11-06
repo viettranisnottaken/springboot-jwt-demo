@@ -1,20 +1,20 @@
 package Tutorial.authDemo.modules.auth.dto;
 
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.stereotype.Service;
 
-@Service
 @Getter
 @Setter
+@Accessors(fluent = true)
+@RequiredArgsConstructor
 public class LoginResponseDto {
+    @NonNull
     private String accessToken;
+
+    @NonNull
     private String refreshToken;
-
-    public LoginResponseDto getResponse(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-
-        return this;
-    }
 }
