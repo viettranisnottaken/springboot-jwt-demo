@@ -9,11 +9,12 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Accessors(fluent = true)
+@Accessors
 public class UserResponseDto {
-    @NonNull
-    private Long id;
 
-    @NonNull
-    private String email;
+  @NonNull
+  private Long id;
+
+  @NonNull
+  private String email;
 }

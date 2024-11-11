@@ -4,13 +4,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.stereotype.Service;
 
 @Getter
 @Setter
-@Accessors(fluent = true)
+@Accessors
 @RequiredArgsConstructor
 public class LoginRequestDto {
-    private String email;
-    private String password;
+
+  private String email;
+  private String password;
 }

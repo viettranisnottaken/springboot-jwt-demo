@@ -6,13 +6,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper implements IBaseMapper<UserResponseDto, UserEntity> {
-    @Override
-    public UserResponseDto entityToDto(UserEntity userEntity) {
-        return new UserResponseDto(userEntity.id(), userEntity.email());
-    }
 
-    @Override
-    public UserEntity dtoToEntity(UserResponseDto userResponseDto) {
-        return UserEntity.builder().id(userResponseDto.id()).email(userResponseDto.email()).build();
-    }
+  @Override
+  public UserResponseDto entityToDto(UserEntity userEntity) {
+    return new UserResponseDto(userEntity.getId(), userEntity.getEmail());
+  }
+
+  @Override
+  public UserEntity dtoToEntity(UserResponseDto userResponseDto) {
+    return UserEntity.builder().id(userResponseDto.getId()).email(userResponseDto.getEmail())
+        .build();
+  }
 }
