@@ -6,10 +6,10 @@ import Tutorial.authDemo.modules.auth.dto.SignupRequestDto;
 import Tutorial.authDemo.modules.auth.dto.SignupResponseDto;
 import Tutorial.authDemo.modules.user.UserEntity;
 import Tutorial.authDemo.modules.user.UserRepository;
-import Tutorial.authDemo.util.CustomPasswordEncoder;
 import Tutorial.authDemo.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
   private final UserRepository userRepository;
-  private final CustomPasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
   private final JwtUtil jwtUtil;
 
   @Autowired
-  public AuthController(UserRepository userRepository, CustomPasswordEncoder passwordEncoder,
+  public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder,
       JwtUtil jwtUtil) {
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
