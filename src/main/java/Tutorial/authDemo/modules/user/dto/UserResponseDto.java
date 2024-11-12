@@ -1,16 +1,20 @@
-package Tutorial.authDemo.modules.auth.dto;
+package Tutorial.authDemo.modules.user.dto;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@Accessors
 @RequiredArgsConstructor
-public class LoginRequestDto {
+@Accessors
+public class UserResponseDto {
 
+  @NonNull
+  private Long id;
+
+  @NonNull
   private String email;
-  private String password;
 }

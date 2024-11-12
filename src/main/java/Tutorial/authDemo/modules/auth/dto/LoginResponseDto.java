@@ -1,20 +1,21 @@
 package Tutorial.authDemo.modules.auth.dto;
 
+import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
+import lombok.experimental.Accessors;
+import lombok.extern.jackson.Jacksonized;
 
-@Service
 @Getter
 @Setter
-public class LoginResponseDto {
-    private String accessToken;
-    private String refreshToken;
+@Accessors
+@AllArgsConstructor
+@Jacksonized
+@Builder(toBuilder = true)
+public class LoginResponseDto implements Serializable {
 
-    public LoginResponseDto getResponse(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-
-        return this;
-    }
+  private String accessToken;
+  private String refreshToken;
 }
