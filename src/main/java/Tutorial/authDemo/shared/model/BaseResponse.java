@@ -1,26 +1,35 @@
-package Tutorial.authDemo.modules.auth.dto;
+package Tutorial.authDemo.shared.model;
 
+import Tutorial.authDemo.shared.model.enums.ResponseStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.io.Serializable;
+import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @EqualsAndHashCode
 @Jacksonized
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SignupResponseDto implements Serializable {
+public class BaseResponse<T> {
 
-  private String accessToken;
-  private String refreshToken;
+  List<String> errors;
+  String message;
+  Integer totalPages;
+  Integer pageIndex;
+  Integer pageSize;
+  Long total;
+  ResponseStatus status;
+  T data;
 }

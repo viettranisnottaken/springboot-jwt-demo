@@ -1,5 +1,6 @@
 package Tutorial.authDemo.modules.user.dto;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,11 @@ import lombok.extern.jackson.Jacksonized;
 @Accessors
 @SuperBuilder(toBuilder = true)
 @Jacksonized
-public class UserResponseDto {
-
-  @NonNull
-  private Long id;
+public class UserRequestDto implements Serializable {
 
   @NonNull
   private String email;
+
+  @NonNull
+  private String password;
 }
