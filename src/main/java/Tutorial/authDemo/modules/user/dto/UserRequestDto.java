@@ -1,5 +1,6 @@
 package Tutorial.authDemo.modules.user.dto;
 
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,6 +18,9 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class UserRequestDto implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = -6861349422255697210L;
+  
   @NonNull
   private String email;
 

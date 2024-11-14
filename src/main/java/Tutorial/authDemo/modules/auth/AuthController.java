@@ -13,6 +13,7 @@ import Tutorial.authDemo.shared.exception.CommonException;
 import Tutorial.authDemo.shared.model.BaseResponse;
 import Tutorial.authDemo.shared.model.enums.ResponseStatus;
 import Tutorial.authDemo.util.JwtUtil;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<BaseResponse<SignupResponseDto>> signup(
-      @RequestBody SignupRequestDto payload) {
+      @Valid @RequestBody SignupRequestDto payload) {
     if (payload == null || payload.getEmail() == null || payload.getPassword() == null
         || payload.getPasswordConfirmation() == null || !payload.getPassword()
         .equals(payload.getPasswordConfirmation())) {

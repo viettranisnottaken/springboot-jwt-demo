@@ -22,6 +22,10 @@ public class UserService implements IUserService {
 
   @Override
   public UserEntity create(UserRequestDto userRequestDto) {
+    if (userRequestDto == null) {
+      throw new CommonException(Constants.ERROR.REQUEST.INVALID_BODY);
+    }
+
     UserEntity user = this.userRepository.findByEmail(userRequestDto.getEmail());
 
     if (user != null) {

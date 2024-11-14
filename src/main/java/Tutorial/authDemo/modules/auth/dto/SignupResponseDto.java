@@ -21,6 +21,6 @@ import lombok.extern.jackson.Jacksonized;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SignupResponseDto implements Serializable {
 
-  private String accessToken;
-  private String refreshToken;
+  String accessToken;
+  String refreshToken;
 }

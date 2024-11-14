@@ -5,11 +5,11 @@ import Tutorial.authDemo.modules.user.dto.UserRequestDto;
 
 public interface IUserService {
 
-  public UserEntity create(UserRequestDto userRequestDto);
+  UserEntity create(UserRequestDto userRequestDto);
 
-  public UserEntity findByEmail(String email);
+  UserEntity findByEmail(String email);
 
-  public UserEntity update(UserRequestDto userRequestDto);
+  UserEntity update(UserRequestDto userRequestDto);
 
-  public void delete(String email);
+  void delete(String email);
 }

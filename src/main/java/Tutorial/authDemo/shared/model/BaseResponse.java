@@ -3,6 +3,7 @@ package Tutorial.authDemo.shared.model;
 import Tutorial.authDemo.shared.model.enums.ResponseStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ import lombok.extern.jackson.Jacksonized;
 public class BaseResponse<T> {
 
   List<String> errors;
+  List<Map<String, String>> errorMap;
   String message;
   Integer totalPages;
   Integer pageIndex;
