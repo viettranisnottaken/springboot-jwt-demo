@@ -20,17 +20,18 @@ public class UserMapper implements IBaseMapper<UserEntity, UserRequestDto, UserR
 
   @Override
   public UserEntity requestDtoToEntity(UserRequestDto userRequestDto) {
-    String hashedPassword = this.passwordEncoder.encode(userRequestDto.getPassword());
+    String hashedPassword = userRequestDto.getPassword() != null ? this.passwordEncoder.encode(
+        userRequestDto.getPassword()) : null;
 
     return Optional.of(userRequestDto).map(
-        e -> UserEntity.builder().id(null).email(e.getEmail()).hashedPassword(hashedPassword)
+        e -> UserEntity.builder().id(null).email(e.getEmail())
+            .hashedPassword(hashedPassword)
             .build()).orElse(null);
   }
 
   @Override
   public UserResponseDto entityToResponseDto(UserEntity userEntity) {
     return Optional.of(userEntity)
-        .map(e -> UserResponseDto.builder().id(e.getId()).email(e.getEmail()).build())
-        .orElse(null);
+        .map(e -> UserResponseDto.builder().id(e.getId()).email(e.getEmail()).build()).orElse(null);
   }
 }

@@ -7,9 +7,11 @@ public interface IUserService {
 
   UserEntity create(UserRequestDto userRequestDto);
 
+  UserEntity findById(Long id);
+
   UserEntity findByEmail(String email);
 
-  UserEntity update(UserRequestDto userRequestDto);
+  UserEntity update(Long id, UserRequestDto userRequestDto);
 
-  void delete(String email);
+  void delete(Long id);
 }

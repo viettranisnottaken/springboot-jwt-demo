@@ -18,13 +18,39 @@ public class GlobalExceptionHandler {
       MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
 
-    ex.getBindingResult().getFieldErrors().forEach(error ->
-        errors.put(error.getField(), error.getDefaultMessage())
-    );
+    ex.getBindingResult().getFieldErrors()
+        .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
-    BaseResponse<Object> response = BaseResponse.builder()
-        .errorMap(List.of(errors)).status(ResponseStatus.FAILED).build();
+    BaseResponse<Object> response = BaseResponse.builder().errorMap(List.of(errors))
+        .status(ResponseStatus.FAILED).build();
 
     return ResponseEntity.badRequest().body(response);
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<BaseResponse<Object>> handleNotFoundExceptions(NotFoundException ex) {
+
+    BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
+        .status(ResponseStatus.FAILED).build();
+
+    return ResponseEntity.status(404).body(response);
+  }
+
+  @ExceptionHandler(BadRequestException.class)
+  public ResponseEntity<BaseResponse<Object>> handleBadRequestExceptions(BadRequestException ex) {
+
+    BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
+        .status(ResponseStatus.FAILED).build();
+
+    return ResponseEntity.badRequest().body(response);
+  }
+
+  @ExceptionHandler(ConflictException.class)
+  public ResponseEntity<BaseResponse<Object>> handleConflictExceptions(ConflictException ex) {
+
+    BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
+        .status(ResponseStatus.FAILED).build();
+
+    return ResponseEntity.status(409).body(response);
   }
 }
