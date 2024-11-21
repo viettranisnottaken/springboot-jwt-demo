@@ -10,6 +10,10 @@ import Tutorial.authDemo.shared.exception.NotFoundException;
 import jakarta.annotation.Nonnull;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,15 +48,31 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public UserEntity findById(Long id) {
+  public UserEntity findById(@Nonnull Long id) {
     return this.userRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(Constants.ERROR.USER.NOT_FOUND));
   }
 
   @Override
-  public UserEntity findByEmail(String email) {
+  public UserEntity findByEmail(@Nonnull String email) {
     return Optional.ofNullable(this.userRepository.findByEmail(email))
         .orElseThrow(() -> new NotFoundException(Constants.ERROR.USER.NOT_FOUND));
+  }
+
+  @Override
+  public Page<UserEntity> getUsers(int pageNo, int pageSize, String sortBy, String sortDirection,
+      String name) {
+
+    if (!sortDirection.equals(Sort.Direction.ASC.toString()) && !sortDirection.equals(
+        Sort.Direction.DESC.toString())) {
+      throw new BadRequestException(Constants.ERROR.REQUEST.INVALID_BODY);
+    }
+
+    Pageable pageable = PageRequest.of(pageNo, pageSize,
+        Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+
+    return name == null ? this.userRepository.findAll(pageable)
+        : this.userRepository.findByName(name, pageable);
   }
 
   @Override
@@ -76,7 +96,12 @@ public class UserService implements IUserService {
     String email = newData.getEmail() == null ? existingData.getEmail() : newData.getEmail();
     String password = newData.getHashedPassword() == null ? existingData.getHashedPassword()
         : newData.getHashedPassword();
+    String firstName =
+        newData.getFirstName() == null ? existingData.getFirstName() : newData.getFirstName();
+    String lastName =
+        newData.getLastName() == null ? existingData.getLastName() : newData.getLastName();
 
-    return existingData.toBuilder().id(id).email(email).hashedPassword(password).build();
+    return existingData.toBuilder().id(id).email(email).hashedPassword(password)
+        .firstName(firstName).lastName(lastName).build();
   }
 }

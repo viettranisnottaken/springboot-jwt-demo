@@ -22,4 +22,8 @@ public class SignupRequestDto {
 
   @NotBlank(message = "Password confirmation is required")
   private String passwordConfirmation;
+
+  private String firstName;
+
+  private String lastName;
 }

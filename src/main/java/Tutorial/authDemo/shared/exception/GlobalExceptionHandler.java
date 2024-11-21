@@ -53,4 +53,14 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.status(409).body(response);
   }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<BaseResponse<Object>> handleUnauthorizedExceptions(
+      UnauthorizedException ex) {
+
+    BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
+        .status(ResponseStatus.FAILED).build();
+
+    return ResponseEntity.status(401).body(response);
+  }
 }
