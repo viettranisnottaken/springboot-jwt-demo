@@ -42,14 +42,16 @@ public class UserService implements IUserService {
 
     // request -> entity
     // save
-    return Optional.of(userRequestDto).map(this.userMapper::requestDtoToEntity)
+    return Optional.of(userRequestDto)
+        .map(this.userMapper::requestDtoToEntity)
         .map(this.userRepository::save)
         .orElseThrow(() -> new CommonException(Constants.ERROR.USER.CREATE));
   }
 
   @Override
   public UserEntity findById(@Nonnull Long id) {
-    return this.userRepository.findById(id)
+    return this.userRepository
+        .findById(id)
         .orElseThrow(() -> new NotFoundException(Constants.ERROR.USER.NOT_FOUND));
   }
 
@@ -60,18 +62,19 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public Page<UserEntity> getUsers(int pageNo, int pageSize, String sortBy, String sortDirection,
-      String name) {
+  public Page<UserEntity> getUsers(
+      int pageNo, int pageSize, String sortBy, String sortDirection, String name) {
 
-    if (!sortDirection.equals(Sort.Direction.ASC.toString()) && !sortDirection.equals(
-        Sort.Direction.DESC.toString())) {
+    if (!sortDirection.equals(Sort.Direction.ASC.toString())
+        && !sortDirection.equals(Sort.Direction.DESC.toString())) {
       throw new BadRequestException(Constants.ERROR.REQUEST.INVALID_BODY);
     }
 
-    Pageable pageable = PageRequest.of(pageNo, pageSize,
-        Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+    Pageable pageable =
+        PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
 
-    return name == null ? this.userRepository.findAll(pageable)
+    return name == null
+        ? this.userRepository.findAll(pageable)
         : this.userRepository.findByName(name, pageable);
   }
 
@@ -94,14 +97,21 @@ public class UserService implements IUserService {
   private UserEntity mergeExistingUserDataWithNewData(UserEntity existingData, UserEntity newData) {
     Long id = newData.getId() == null ? existingData.getId() : newData.getId();
     String email = newData.getEmail() == null ? existingData.getEmail() : newData.getEmail();
-    String password = newData.getHashedPassword() == null ? existingData.getHashedPassword()
-        : newData.getHashedPassword();
+    String password =
+        newData.getHashedPassword() == null
+            ? existingData.getHashedPassword()
+            : newData.getHashedPassword();
     String firstName =
         newData.getFirstName() == null ? existingData.getFirstName() : newData.getFirstName();
     String lastName =
         newData.getLastName() == null ? existingData.getLastName() : newData.getLastName();
 
-    return existingData.toBuilder().id(id).email(email).hashedPassword(password)
-        .firstName(firstName).lastName(lastName).build();
+    return existingData.toBuilder()
+        .id(id)
+        .email(email)
+        .hashedPassword(password)
+        .firstName(firstName)
+        .lastName(lastName)
+        .build();
   }
 }

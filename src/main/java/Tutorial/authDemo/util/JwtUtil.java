@@ -1,18 +1,17 @@
 package Tutorial.authDemo.util;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,30 +29,28 @@ public class JwtUtil {
   private String refreshTokenTTL;
 
   public String generateAccessToken(String subject) {
-    return this.generateJwtToken(subject, Short.parseShort(this.accessTokenTTL));
+    return this.generateJwtToken(subject, Integer.parseInt(this.accessTokenTTL));
   }
 
   public String generateRefreshToken(String subject) {
     return this.generateJwtToken(subject, Integer.parseInt(this.refreshTokenTTL));
   }
 
-  public boolean validateJwtToken(String authToken) {
-    try {
-      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-      return true;
-    } catch (SignatureException e) {
-      logger.error("Invalid JWT signature: {}", e.getMessage());
-    } catch (MalformedJwtException e) {
-      logger.error("Invalid JWT token: {}", e.getMessage());
-    } catch (ExpiredJwtException e) {
-      logger.error("JWT token is expired: {}", e.getMessage());
-    } catch (UnsupportedJwtException e) {
-      logger.error("JWT token is unsupported: {}", e.getMessage());
-    } catch (IllegalArgumentException e) {
-      logger.error("JWT claims string is empty: {}", e.getMessage());
-    }
+  public String extractEmail(String token) {
+    return extractClaim(token, Claims::getSubject);
+  }
 
-    return false;
+  public Date extractExpiration(String token) {
+    return extractClaim(token, Claims::getExpiration);
+  }
+
+  public boolean validateJwtToken(String authToken, UserDetails userDetails) {
+    return !isTokenExpired(authToken) && userDetails.getUsername().equals(extractEmail(authToken));
+  }
+
+  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    final Claims claims = extractAllClaims(token);
+    return claimsResolver.apply(claims);
   }
 
   private Key key() {
@@ -65,7 +62,15 @@ public class JwtUtil {
         .setSubject(subject)
         .setIssuedAt(new Date())
         .setExpiration(new Date((new Date()).getTime() + ttl))
-        .signWith(key(), SignatureAlgorithm.HS256)
+        .signWith(this.key(), SignatureAlgorithm.HS256)
         .compact();
+  }
+
+  private Claims extractAllClaims(String token) {
+    return Jwts.parserBuilder().setSigningKey(this.key()).build().parseClaimsJws(token).getBody();
+  }
+
+  private Boolean isTokenExpired(String token) {
+    return extractExpiration(token).before(new Date());
   }
 }

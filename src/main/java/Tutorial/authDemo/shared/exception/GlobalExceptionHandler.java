@@ -5,6 +5,7 @@ import Tutorial.authDemo.shared.model.enums.ResponseStatus;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
         .status(ResponseStatus.FAILED).build();
 
-    return ResponseEntity.status(404).body(response);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
   @ExceptionHandler(BadRequestException.class)
@@ -51,7 +52,7 @@ public class GlobalExceptionHandler {
     BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
         .status(ResponseStatus.FAILED).build();
 
-    return ResponseEntity.status(409).body(response);
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
   }
 
   @ExceptionHandler(UnauthorizedException.class)
@@ -61,6 +62,6 @@ public class GlobalExceptionHandler {
     BaseResponse<Object> response = BaseResponse.builder().errors(List.of(ex.getMessage()))
         .status(ResponseStatus.FAILED).build();
 
-    return ResponseEntity.status(401).body(response);
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
   }
 }
