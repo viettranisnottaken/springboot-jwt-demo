@@ -1,5 +1,7 @@
 package Tutorial.authDemo.modules.user.dto;
 
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,14 +16,15 @@ import lombok.extern.jackson.Jacksonized;
 @Accessors
 @SuperBuilder(toBuilder = true)
 @Jacksonized
-public class UserResponseDto {
+public class UserRequestDto implements Serializable {
 
-  @NonNull
-  private Long id;
+  @Serial
+  private static final long serialVersionUID = -6861349422255697210L;
 
   @NonNull
   private String email;
 
+  private String password;
   private String firstName;
   private String lastName;
 }

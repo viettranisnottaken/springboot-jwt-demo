@@ -26,4 +26,6 @@ public class UserEntity {
 
   private String email;
   private String hashedPassword;
+  private String firstName;
+  private String lastName;
 }

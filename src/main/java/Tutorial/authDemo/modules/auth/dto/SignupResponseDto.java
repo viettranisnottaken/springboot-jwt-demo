@@ -1,21 +1,26 @@
 package Tutorial.authDemo.modules.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
-@Getter
-@Setter
-@Accessors
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode
 @Jacksonized
-@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SignupResponseDto implements Serializable {
 
-  private String accessToken;
-  private String refreshToken;
+  String accessToken;
+  String refreshToken;
 }
